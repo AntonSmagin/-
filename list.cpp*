@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Node *First(int val) //
+Node *First(int val) // Создание первого элемента
 {
 	Node *pv = new Node;
 	pv->val = val; //(*pv).val
@@ -32,7 +32,7 @@ Node* find(Node *const pbeg, int val) // Находит элемент и воз
 		if (pv->val == val) break;
 		pv = pv->p;
 	}
-	return pv;
+	return pv; // добавить NULL,если не найдем элемент с заданным ключем
 }
 
 int del(Node **pbeg) //Удаление первого элемента 
@@ -44,15 +44,16 @@ int del(Node **pbeg) //Удаление первого элемента
 	delete pv;
 	return temp;
 }
+
 bool del_key(Node **pbeg, int key) // Удаление элемента по ключу
 {
-	Node *pkey = find(*pbeg, key);
+	Node *pkey = find(*pbeg, key);  // запоминаем адрес указывающий на 
 	if (pkey != NULL){
 		if (pkey == *pbeg)
 			*pbeg = (*pbeg)->p;
 		else {
-			Node *pv = *pbeg;
-			while (pkey != pv->p)
+			Node *pv = *pbeg;    
+			while (pkey != pv->p)  // pv верменный файл 
 				pv = pv->p;
 			(pv)->p = pkey->p;
 		}
@@ -61,7 +62,7 @@ bool del_key(Node **pbeg, int key) // Удаление элемента по к�
 	}
 	return false;
 }
-Node *insert_after(Node*const pbeg, int key, int el) // Добавление элемента после ключа
+void insert_after(Node*const pbeg, int key, int el) // Добавление элемента после ключа
 {
 	Node*pkey = NULL;
 
@@ -71,11 +72,9 @@ Node *insert_after(Node*const pbeg, int key, int el) // Добавление э�
 		pv->val = el;
 		pv->p = pkey->p;
 		pkey->p = pv;
-		return pv;
 	}
-	return 0;
 }
-Node *insert_befor(Node **pbeg, int key,int el) // Добавление элемента до ключа
+Node *insert_before(Node **pbeg, int key,int el) // Добавление элемента до ключа
 {
 	Node *pkey = NULL;
 	if ((pkey = find(*pbeg, key))!=NULL)
@@ -204,7 +203,7 @@ void menu()
 						cout << "Напишите новый элемент\n\n";
 						cin >> el;
 
-						*insert_after(pbeg, key, el);
+						insert_after(pbeg, key, el);
 					}
 					else {
 						cout << "Ошибка! Нужно добавить первый элемент!\n\n";
@@ -218,7 +217,7 @@ void menu()
 						cin >> key;
 						cout << "Напишите новый элемент\n\n";
 						cin >> el;
-						
+
 						*insert_befor(&pbeg, key, el);
 					}
 					else {
@@ -231,7 +230,7 @@ void menu()
 					if (pbeg != NULL){
 						cout << "Напишите элемент который хотите удалить\n\n";
 						cin >> key;
-						del_key(&pbeg,key);
+						del_key(&pbeg, key);
 						cout << "Элемент был удален из очереди\n\n";
 					}
 					else {
@@ -250,7 +249,10 @@ void menu()
 					cout << endl;
 					system("cls");
 					break;
+					
+					
 				}
+				
 			}
 			else
 			{

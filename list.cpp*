@@ -1,0 +1,270 @@
+#include "stdafx.h"
+#include "list.h"
+#include <iostream>
+#include <clocale>
+#include <ctype.h>
+#include <cstring>
+
+
+using namespace std;
+
+Node *First(int val) //
+{
+	Node *pv = new Node;
+	pv->val = val; //(*pv).val
+	pv->p = NULL;
+	return pv;
+}
+
+void add(Node **pend, int val) // Добавление элемента в конец очереди 
+{
+	Node *pv = new Node;
+	pv->val = val;
+	pv->p = NULL;
+	(*pend)->p = pv;
+	*pend = pv;
+}
+
+Node* find(Node *const pbeg, int val) // Находит элемент и возвращает адресс указывающий на содержимое этого элемента
+{
+	Node *pv = pbeg;
+	while (pv){
+		if (pv->val == val) break;
+		pv = pv->p;
+	}
+	return pv;
+}
+
+int del(Node **pbeg) //Удаление первого элемента 
+{
+
+	int temp = (*pbeg)->val;
+	Node *pv = *pbeg;
+	*pbeg = (*pbeg)->p;
+	delete pv;
+	return temp;
+}
+bool del_key(Node **pbeg, int key) // Удаление элемента по ключу
+{
+	Node *pkey = find(*pbeg, key);
+	if (pkey != NULL){
+		if (pkey == *pbeg)
+			*pbeg = (*pbeg)->p;
+		else {
+			Node *pv = *pbeg;
+			while (pkey != pv->p)
+				pv = pv->p;
+			(pv)->p = pkey->p;
+		}
+		delete pkey;
+		return true;
+	}
+	return false;
+}
+Node *insert_after(Node*const pbeg, int key, int el) // Добавление элемента после ключа
+{
+	Node*pkey = NULL;
+
+	if ((pkey = find(pbeg, key)) != NULL)
+	{
+		Node *pv = new Node;
+		pv->val = el;
+		pv->p = pkey->p;
+		pkey->p = pv;
+		return pv;
+	}
+	return 0;
+}
+Node *insert_befor(Node **pbeg, int key,int el) // Добавление элемента до ключа
+{
+	Node *pkey = NULL;
+	if ((pkey = find(*pbeg, key))!=NULL)
+	{
+		Node *pv = new Node;
+		pv-> val = el;
+		if (pkey == *pbeg)
+		{
+			pv->p = *pbeg;
+			*pbeg = pv;
+			return pv;
+		}
+
+		else
+		{
+			pv->p= pkey;
+			Node*k = *pbeg;
+			while (k->p != pkey)
+				k = k->p;
+			k->p= pv;
+			return pv;
+		}
+	}
+	return NULL;
+}
+
+
+void print(Node **pbeg) //Печатаем очередь
+{
+	Node *tmp = (*pbeg)->p;
+
+	printf("%d ", (*pbeg)->val);
+	while (tmp != NULL)
+	{
+		printf("%d ", tmp->val);
+		tmp = tmp->p;
+	}
+	cout << endl;
+
+}
+
+void menu()
+{
+	setlocale(LC_ALL, "Russian");
+
+	Node *pbeg = NULL;
+	Node *pend = NULL;
+	{
+
+		char t;
+		int first_el;
+		int el = 0;
+		int key = 0;
+		do
+		{
+			cout << "***QUEUE***" << endl << endl;
+			cout << "1. Добавить первый элемент в список(очередь)\n";
+			cout << "          Действия с очередью:\n";
+			cout << "2. Добавить новый элемент в очередь\n";
+			cout << "3. Удалить первый элемент из очереди\n";
+			cout << "          Действия со списком:\n";
+			cout << "4. Добавить элемент в список после заданного ключа\n";
+			cout << "5. Добавить элемент в список до заданного ключа\n";
+			cout << "6. Удалить элемент по ключу в списке\n";
+
+			cout << "7. Распечатать элемент(ы) списка(очереди)\n\n";
+			cout << "Выберите число и нажмите ENTER\n";
+			cout << "Для выхода введите 0\n";
+			cin >> t;
+			isdigit(t);
+			int c;
+			c = t - '0';
+			//double atof(const char *t);
+			if (c >= 0 && c < 8)
+				//if (t >= 0 && t < 5)
+			{
+
+				switch (c)
+				{
+				case 1:
+					if (pbeg == NULL)
+					{
+						cout << "Создайте первый элемент\n\n";
+						cin >> first_el;
+
+						pbeg = First(first_el);
+						pend = pbeg;
+					}
+					else
+					{
+						cout << "Ошибка! Первый элемент существует!\n\n";
+						system("pause");
+					}
+					system("CLS");
+					break;
+
+				case 2:
+					if (pbeg != NULL){
+						cout << "Напишите новый элемент\n\n";
+						cin >> el;
+						add(&pend, el);
+					}
+					else {
+						cout << "Ошибка! Нужно добавить первый элемент!\n\n";
+						system("pause");
+					}
+					system("CLS");
+					break;
+				case 3:
+					if (pbeg != NULL){
+						del(&pbeg);
+						cout << "Элемент был удален из очереди\n\n";
+					}
+					else {
+						cout << endl;
+						cout << "Ошибка! Очередь пуста!\n\n";
+					}
+					system("pause");
+					cout << endl;
+					system("cls");
+					break;
+				case 4:
+					if (pbeg != NULL){
+						cout << "Напишите элемент после которого хотите добавить новый элемент\n\n";
+						cin >> key;
+						cout << "Напишите новый элемент\n\n";
+						cin >> el;
+
+						*insert_after(pbeg, key, el);
+					}
+					else {
+						cout << "Ошибка! Нужно добавить первый элемент!\n\n";
+						system("pause");
+					}
+					system("CLS");
+					break;
+				case 5:
+					if (pbeg != NULL){
+						cout << "Напишите элемент перед которым хотите добавить новый элемент\n\n";
+						cin >> key;
+						cout << "Напишите новый элемент\n\n";
+						cin >> el;
+						
+						*insert_befor(&pbeg, key, el);
+					}
+					else {
+						cout << "Ошибка! Нужно добавить первый элемент!\n\n";
+						system("pause");
+					}
+					system("CLS");
+					break;
+				case 6:
+					if (pbeg != NULL){
+						cout << "Напишите элемент который хотите удалить\n\n";
+						cin >> key;
+						del_key(&pbeg,key);
+						cout << "Элемент был удален из очереди\n\n";
+					}
+					else {
+						cout << endl;
+						cout << "Ошибка! Очередь пуста!\n\n";
+					}
+					system("pause");
+					cout << endl;
+					system("cls");
+					break;
+				case 7:
+					cout << "Распечатаная очередь\n\n";
+					print(&pbeg);
+					cout << endl;
+					system("pause");
+					cout << endl;
+					system("cls");
+					break;
+				}
+			}
+			else
+			{
+				cout << endl;
+				cout << "Неверное значение! Введиите число от 1 до 4" << endl << endl;
+				system("pause");
+				cout << endl;
+				system("cls");
+
+
+			}
+		} while (1);
+
+
+	}
+
+}

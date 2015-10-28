@@ -8,33 +8,33 @@
 
 using namespace std;
 
-Node1 *First1(int val) // Создание первого элемента
+Queue *First1(int val) // Создание первого элемента
 {
-	Node1 *pv = new Node1;
+	Queue *pv = new Queue;
 	pv->val = val; //(*pv).val
 	pv->next = NULL;
 	return pv;
 }
-Node2 *First2(int val) // Создание первого элемента
+List *First2(int val) // Создание первого элемента
 {
-	Node2 *pv = new Node2;
+	List *pv = new List;
 	pv->val = val; //(*pv).val
 	pv->next = NULL;
 	return pv;
 }
 
-void add(Node1 **pend, int val) // Добавление элемента в конец очереди 
+void add(Queue **pend, int val) // Добавление элемента в конец очереди 
 {
-	Node1 *pv = new Node1;
+	Queue *pv = new Queue;
 	pv->val = val;
 	pv->next = NULL;
 	(*pend)->next = pv;
 	*pend = pv;
 }
 
-Node2* find(Node2 *const pbeg, int val) // Находит элемент и возвращает адресс указывающий на содержимое этого элемента
+List* find(List *const pbeg, int val) // Находит элемент и возвращает адресс указывающий на содержимое этого элемента
 {
-	Node2 *pv = pbeg;
+	List *pv = pbeg;
 	while (pv) {
 		if (pv->val == val) break;
 		pv = pv->next;
@@ -42,33 +42,33 @@ Node2* find(Node2 *const pbeg, int val) // Находит элемент и во
 	return pv; // добавить NULL,если не найдем элемент с заданным ключем
 }
 
-int del(Node1 **pbeg) //Удаление первого элемента 
+int del(Queue **pbeg) //Удаление первого элемента 
 {
 
 	int temp = (*pbeg)->val;
-	Node1 *pv = *pbeg;
+	Queue *pv = *pbeg;
 	*pbeg = (*pbeg)->next;
 	delete pv;
 	return temp;
 }
-int del(Node2 **pbeg) //Удаление первого элемента 
+int del(List **pbeg) //Удаление первого элемента 
 {
 
 	int temp = (*pbeg)->val;
-	Node2 *pv = *pbeg;
+	List *pv = *pbeg;
 	*pbeg = (*pbeg)->next;
 	delete pv;
 	return temp;
 }
 
-bool del_key(Node2 **pbeg, int key) // Удаление элемента по ключу
+bool del_key(List **pbeg, int key) // Удаление элемента по ключу
 {
-	Node2 *pkey = find(*pbeg, key);  // запоминаем адрес указывающий на 
+	List *pkey = find(*pbeg, key);  // запоминаем адрес указывающий на 
 	if (pkey != NULL) {
 		if (pkey == *pbeg)
 			*pbeg = (*pbeg)->next;
 		else {
-			Node2 *pv = *pbeg;
+			List *pv = *pbeg;
 			while (pkey != pv->next)  // pv верменный файл 
 				pv = pv->next;
 			(pv)->next = pkey->next;
@@ -78,24 +78,24 @@ bool del_key(Node2 **pbeg, int key) // Удаление элемента по к
 	}
 	return false;
 }
-void insert_after(Node2*const pbeg, int key, int el) // Добавление элемента после ключа
+void insert_after(List*const pbeg, int key, int el) // Добавление элемента после ключа
 {
-	Node2*pkey = NULL;
+	List*pkey = NULL;
 
 	if ((pkey = find(pbeg, key)) != NULL)
 	{
-		Node2 *pv = new Node2;
+		List *pv = new List;
 		pv->val = el;
 		pv->next = pkey->next;
 		pkey->next = pv;
 	}
 }
-void insert_before(Node2 **pbeg, int key, int el) // Добавление элемента до ключа
+void insert_before(List **pbeg, int key, int el) // Добавление элемента до ключа
 {
-	Node2 *pkey = NULL;
+	List *pkey = NULL;
 	if ((pkey = find(*pbeg, key)) != NULL)
 	{
-		Node2 *pv = new Node2;
+		List *pv = new List;
 		pv->val = el;
 		if (pkey == *pbeg)
 		{
@@ -107,7 +107,7 @@ void insert_before(Node2 **pbeg, int key, int el) // Добавление эле
 		else
 		{
 			pv->next = pkey;
-			Node2*k = *pbeg;
+			List*k = *pbeg;
 			while (k->next != pkey)
 				k = k->next;
 			k->next = pv;
@@ -116,9 +116,9 @@ void insert_before(Node2 **pbeg, int key, int el) // Добавление эле
 }
 
 
-void print(Node1 **pbeg) //Печатаем очередь
+void print(Queue **pbeg) //Печатаем очередь
 {
-	Node1 *tmp = (*pbeg)->next;
+	Queue *tmp = (*pbeg)->next;
 
 	printf("%d ", (*pbeg)->val);
 	while (tmp != NULL)
@@ -129,9 +129,9 @@ void print(Node1 **pbeg) //Печатаем очередь
 	cout << endl;
 
 }
-void print(Node2 **pbeg) //Печатаем очередь
+void print(List **pbeg) //Печатаем очередь
 {
-	Node2 *tmp = (*pbeg)->next;
+	List *tmp = (*pbeg)->next;
 
 	printf("%d ", (*pbeg)->val);
 	while (tmp != NULL)
@@ -144,7 +144,7 @@ void print(Node2 **pbeg) //Печатаем очередь
 }
 void menu(){
 setlocale(LC_ALL, "Russian");
-int f;
+char f;
 do
 {
 	cout << "***QUEUE***" << endl << endl;
@@ -191,11 +191,11 @@ void menu1()
 {
 	setlocale(LC_ALL, "Russian");
 
-	Node1 *pbeg = NULL;
-	Node1 *pend = NULL;
+	Queue *pbeg = NULL;
+	Queue *pend = NULL;
 	{
 
-		char t;
+		char t1;
 		int first_el;
 		int el = 0;
 		int key = 0;
@@ -210,10 +210,10 @@ void menu1()
 			cout << "Для продолжения выберите цифру и нажмите ENTER\n";
 			cout << "Для выхода введите 0\n";
 			cout << "Для возврата в предыдущее меню введите 9 Внимание! Данные будут удалены!\n";
-			cin >> t;
-			isdigit(t);
+			cin >> t1;
+			isdigit(t1);
 			int c;
-			c = t - '0';
+			c = t1 - '0';
 			if (c >= 0 && c < 5)
 			{
 
@@ -300,11 +300,11 @@ void menu2()
 {
 	setlocale(LC_ALL, "Russian");
 
-	Node2 *pbeg = NULL;
-	Node2 *pend = NULL;
+	List *pbeg = NULL;
+	List *pend = NULL;
 	{
 
-		char t;
+		char t2;
 		int first_el;
 		int el = 0;
 		int key = 0;
@@ -320,10 +320,10 @@ void menu2()
 			cout << "Для продолжения выберите цифру и нажмите ENTER\n";
 			cout << "Для выхода введите 0\n";
 			cout << "Для возврата в предыдущее меню введите 9 Внимание! Данные будут удалены!\n";
-			cin >> t;
-			isdigit(t);
+			cin >> t2;
+			isdigit(t2);
 			int c;
-			c = t - '0';
+			c = t2 - '0';
 
 			if (c >= 0 && c < 6)
 

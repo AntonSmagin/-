@@ -8,120 +8,191 @@
 
 using namespace std;
 
-Node *First(int val) // Создание первого элемента
+Node1 *First1(int val) // Создание первого элемента
 {
-	Node *pv = new Node;
+	Node1 *pv = new Node1;
 	pv->val = val; //(*pv).val
-	pv->p = NULL;
+	pv->next = NULL;
+	return pv;
+}
+Node2 *First2(int val) // Создание первого элемента
+{
+	Node2 *pv = new Node2;
+	pv->val = val; //(*pv).val
+	pv->next = NULL;
 	return pv;
 }
 
-void add(Node **pend, int val) // Добавление элемента в конец очереди 
+void add(Node1 **pend, int val) // Добавление элемента в конец очереди 
 {
-	Node *pv = new Node;
+	Node1 *pv = new Node1;
 	pv->val = val;
-	pv->p = NULL;
-	(*pend)->p = pv;
+	pv->next = NULL;
+	(*pend)->next = pv;
 	*pend = pv;
 }
 
-Node* find(Node *const pbeg, int val) // Находит элемент и возвращает адресс указывающий на содержимое этого элемента
+Node2* find(Node2 *const pbeg, int val) // Находит элемент и возвращает адресс указывающий на содержимое этого элемента
 {
-	Node *pv = pbeg;
-	while (pv){
+	Node2 *pv = pbeg;
+	while (pv) {
 		if (pv->val == val) break;
-		pv = pv->p;
+		pv = pv->next;
 	}
 	return pv; // добавить NULL,если не найдем элемент с заданным ключем
 }
 
-int del(Node **pbeg) //Удаление первого элемента 
+int del(Node1 **pbeg) //Удаление первого элемента 
 {
 
 	int temp = (*pbeg)->val;
-	Node *pv = *pbeg;
-	*pbeg = (*pbeg)->p;
+	Node1 *pv = *pbeg;
+	*pbeg = (*pbeg)->next;
+	delete pv;
+	return temp;
+}
+int del(Node2 **pbeg) //Удаление первого элемента 
+{
+
+	int temp = (*pbeg)->val;
+	Node2 *pv = *pbeg;
+	*pbeg = (*pbeg)->next;
 	delete pv;
 	return temp;
 }
 
-bool del_key(Node **pbeg, int key) // Удаление элемента по ключу
+bool del_key(Node2 **pbeg, int key) // Удаление элемента по ключу
 {
-	Node *pkey = find(*pbeg, key);  // запоминаем адрес указывающий на 
-	if (pkey != NULL){
+	Node2 *pkey = find(*pbeg, key);  // запоминаем адрес указывающий на 
+	if (pkey != NULL) {
 		if (pkey == *pbeg)
-			*pbeg = (*pbeg)->p;
+			*pbeg = (*pbeg)->next;
 		else {
-			Node *pv = *pbeg;    
-			while (pkey != pv->p)  // pv верменный файл 
-				pv = pv->p;
-			(pv)->p = pkey->p;
+			Node2 *pv = *pbeg;
+			while (pkey != pv->next)  // pv верменный файл 
+				pv = pv->next;
+			(pv)->next = pkey->next;
 		}
 		delete pkey;
 		return true;
 	}
 	return false;
 }
-void insert_after(Node*const pbeg, int key, int el) // Добавление элемента после ключа
+void insert_after(Node2*const pbeg, int key, int el) // Добавление элемента после ключа
 {
-	Node*pkey = NULL;
+	Node2*pkey = NULL;
 
 	if ((pkey = find(pbeg, key)) != NULL)
 	{
-		Node *pv = new Node;
+		Node2 *pv = new Node2;
 		pv->val = el;
-		pv->p = pkey->p;
-		pkey->p = pv;
+		pv->next = pkey->next;
+		pkey->next = pv;
 	}
 }
-Node *insert_before(Node **pbeg, int key,int el) // Добавление элемента до ключа
+void insert_before(Node2 **pbeg, int key, int el) // Добавление элемента до ключа
 {
-	Node *pkey = NULL;
-	if ((pkey = find(*pbeg, key))!=NULL)
+	Node2 *pkey = NULL;
+	if ((pkey = find(*pbeg, key)) != NULL)
 	{
-		Node *pv = new Node;
-		pv-> val = el;
+		Node2 *pv = new Node2;
+		pv->val = el;
 		if (pkey == *pbeg)
 		{
-			pv->p = *pbeg;
+			pv->next = *pbeg;
 			*pbeg = pv;
-			return pv;
+	
 		}
 
 		else
 		{
-			pv->p= pkey;
-			Node*k = *pbeg;
-			while (k->p != pkey)
-				k = k->p;
-			k->p= pv;
-			return pv;
+			pv->next = pkey;
+			Node2*k = *pbeg;
+			while (k->next != pkey)
+				k = k->next;
+			k->next = pv;
 		}
 	}
-	return NULL;
 }
 
 
-void print(Node **pbeg) //Печатаем очередь
+void print(Node1 **pbeg) //Печатаем очередь
 {
-	Node *tmp = (*pbeg)->p;
+	Node1 *tmp = (*pbeg)->next;
 
 	printf("%d ", (*pbeg)->val);
 	while (tmp != NULL)
 	{
 		printf("%d ", tmp->val);
-		tmp = tmp->p;
+		tmp = tmp->next;
 	}
 	cout << endl;
 
 }
+void print(Node2 **pbeg) //Печатаем очередь
+{
+	Node2 *tmp = (*pbeg)->next;
 
-void menu()
+	printf("%d ", (*pbeg)->val);
+	while (tmp != NULL)
+	{
+		printf("%d ", tmp->val);
+		tmp = tmp->next;
+	}
+	cout << endl;
+
+}
+void menu(){
+setlocale(LC_ALL, "Russian");
+int f;
+do
+{
+	cout << "***QUEUE***" << endl << endl;
+	cout << "Выбирите режим программы:\n";
+	cout << "1.Очередь\n";
+	cout << "2.Список\n\n";
+
+	cout << "Для продолжения выберите цифру и нажмите ENTER\n";
+	cout << "Для выхода введите 0\n";
+	cin >> f;
+	isdigit(f);
+	int c;
+	c = f - '0';
+	if (c >= 0 && c < 3)
+	{
+
+		switch (c)
+		{
+		case 1:
+
+			menu1();
+
+		case 2:
+
+			menu2();
+
+		}
+
+	}
+	else
+	{
+		cout << endl;
+		cout << "Неверное значение! Введиите число от 0 до 2" << endl << endl;
+		system("pause");
+		cout << endl;
+		system("cls");
+
+
+	}
+} while (1);
+}
+
+void menu1()
 {
 	setlocale(LC_ALL, "Russian");
 
-	Node *pbeg = NULL;
-	Node *pend = NULL;
+	Node1 *pbeg = NULL;
+	Node1 *pend = NULL;
 	{
 
 		char t;
@@ -131,25 +202,19 @@ void menu()
 		do
 		{
 			cout << "***QUEUE***" << endl << endl;
-			cout << "1. Добавить первый элемент в список(очередь)\n";
-			cout << "          Действия с очередью:\n";
+			cout << "1. Добавить первый элемент в очередь\n";
 			cout << "2. Добавить новый элемент в очередь\n";
 			cout << "3. Удалить первый элемент из очереди\n";
-			cout << "          Действия со списком:\n";
-			cout << "4. Добавить элемент в список после заданного ключа\n";
-			cout << "5. Добавить элемент в список до заданного ключа\n";
-			cout << "6. Удалить элемент по ключу в списке\n";
+     		cout << "4. Распечатать элемент(ы) очереди\n\n";
 
-			cout << "7. Распечатать элемент(ы) списка(очереди)\n\n";
-			cout << "Выберите число и нажмите ENTER\n";
+			cout << "Для продолжения выберите цифру и нажмите ENTER\n";
 			cout << "Для выхода введите 0\n";
+			cout << "Для возврата в предыдущее меню введите 9 Внимание! Данные будут удалены!\n";
 			cin >> t;
 			isdigit(t);
 			int c;
 			c = t - '0';
-			//double atof(const char *t);
-			if (c >= 0 && c < 8)
-				//if (t >= 0 && t < 5)
+			if (c >= 0 && c < 5)
 			{
 
 				switch (c)
@@ -160,7 +225,7 @@ void menu()
 						cout << "Создайте первый элемент\n\n";
 						cin >> first_el;
 
-						pbeg = First(first_el);
+						pbeg = First1(first_el);
 						pend = pbeg;
 					}
 					else
@@ -172,7 +237,7 @@ void menu()
 					break;
 
 				case 2:
-					if (pbeg != NULL){
+					if (pbeg != NULL) {
 						cout << "Напишите новый элемент\n\n";
 						cin >> el;
 						add(&pend, el);
@@ -184,7 +249,7 @@ void menu()
 					system("CLS");
 					break;
 				case 3:
-					if (pbeg != NULL){
+					if (pbeg != NULL) {
 						del(&pbeg);
 						cout << "Элемент был удален из очереди\n\n";
 					}
@@ -197,7 +262,93 @@ void menu()
 					system("cls");
 					break;
 				case 4:
-					if (pbeg != NULL){
+					cout << "Распечатаная очередь\n\n";
+					print(&pbeg);
+					cout << endl;
+					system("pause");
+					cout << endl;
+					system("cls");
+					break;
+				case 9:
+					
+					
+					system("cls");
+					menu();
+					break;
+
+
+				}
+
+			}
+			else
+			{
+				cout << endl;
+				cout << "Неверное значение! Введиите число от 1 до 4" << endl << endl;
+				system("pause");
+				cout << endl;
+				system("cls");
+
+
+			}
+		} while (1);
+
+
+	}
+
+}
+void menu2()
+{
+	setlocale(LC_ALL, "Russian");
+
+	Node2 *pbeg = NULL;
+	Node2 *pend = NULL;
+	{
+
+		char t;
+		int first_el;
+		int el = 0;
+		int key = 0;
+		do
+		{
+			cout << "***QUEUE***" << endl << endl;
+			cout << "1. Добавить первый элемент в список\n";
+			cout << "2. Добавить элемент в список после заданного ключа\n";
+			cout << "3. Добавить элемент в список до заданного ключа\n";
+			cout << "4. Удалить элемент по ключу в списке\n";
+			cout << "5. Распечатать элемент(ы) списка(очереди)\n\n";
+
+			cout << "Для продолжения выберите цифру и нажмите ENTER\n";
+			cout << "Для выхода введите 0\n";
+			cout << "Для возврата в предыдущее меню введите 9 Внимание! Данные будут удалены!\n";
+			cin >> t;
+			isdigit(t);
+			int c;
+			c = t - '0';
+
+			if (c >= 0 && c < 6)
+
+			{
+
+				switch (c)
+				{
+				case 1:
+					if (pbeg == NULL)
+					{
+						cout << "Создайте первый элемент\n\n";
+						cin >> first_el;
+
+						pbeg = First2(first_el);
+						pend = pbeg;
+					}
+					else
+					{
+						cout << "Ошибка! Первый элемент существует!\n\n";
+						system("pause");
+					}
+					system("CLS");
+					break;
+				case 2:
+					if (pbeg != NULL) {
 						cout << "Напишите элемент после которого хотите добавить новый элемент\n\n";
 						cin >> key;
 						cout << "Напишите новый элемент\n\n";
@@ -211,14 +362,14 @@ void menu()
 					}
 					system("CLS");
 					break;
-				case 5:
-					if (pbeg != NULL){
+				case 3:
+					if (pbeg != NULL) {
 						cout << "Напишите элемент перед которым хотите добавить новый элемент\n\n";
 						cin >> key;
 						cout << "Напишите новый элемент\n\n";
 						cin >> el;
 
-						*insert_befor(&pbeg, key, el);
+						insert_befor(&pbeg, key, el);
 					}
 					else {
 						cout << "Ошибка! Нужно добавить первый элемент!\n\n";
@@ -226,8 +377,8 @@ void menu()
 					}
 					system("CLS");
 					break;
-				case 6:
-					if (pbeg != NULL){
+				case 4:
+					if (pbeg != NULL) {
 						cout << "Напишите элемент который хотите удалить\n\n";
 						cin >> key;
 						del_key(&pbeg, key);
@@ -241,7 +392,7 @@ void menu()
 					cout << endl;
 					system("cls");
 					break;
-				case 7:
+				case 5:
 					cout << "Распечатаная очередь\n\n";
 					print(&pbeg);
 					cout << endl;
@@ -249,15 +400,23 @@ void menu()
 					cout << endl;
 					system("cls");
 					break;
-					
-					
+				case 9:
+
+
+					system("cls");
+					menu();
+					break;
+
+
+
+
 				}
-				
+
 			}
 			else
 			{
 				cout << endl;
-				cout << "Неверное значение! Введиите число от 1 до 4" << endl << endl;
+				cout << "Неверное значение! Введиите число от 1 до 5" << endl << endl;
 				system("pause");
 				cout << endl;
 				system("cls");

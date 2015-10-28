@@ -1,17 +1,25 @@
-struct Node
+struct Queue
 {
 	int val;
-	Node *p; 
+	Queue *next;
+};
+struct List
+{
+	int val;
+	List *next;
 };
 
 
-Node *First(int val);
-Node *insert_befor(Node **pbeg, int key, int el);
-Node *insert_after(Node*const pbeg, int key, int el);
+Queue *First1(int val);
+List *First2(int val);
+void insert_befor(List **pbeg, int key, int el);
+void insert_after(List*const pbeg, int key, int el);
 
-void add(Node **pend, int val);
-int del(Node **pbeg);
-bool del_key(Node **pbeg, int key);
-void print(Node **pbeg);
+void add(Queue **pend, int val);
+int del(Queue **pbeg);
+bool del_key(List **pbeg, int key);
+void print(Queue **pbeg);
+void print(List **pbeg);
 void menu();
-
+void menu1();
+void menu2();
